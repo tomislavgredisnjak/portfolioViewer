@@ -8,22 +8,40 @@
     tools:context=".MainActivity"
     android:background="#F5F5F5">
 
-
     <TextView
         android:id="@+id/appTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Portfolio tracker"
+        android:gravity="start"
+        android:padding="10dp"
+        android:text="Value/profit"
+        android:textColor="#333"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/appTitle0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Percentage"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#333"
         android:padding="10dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="end"/>
 
     <!-- ETF value -->
-
+    <FrameLayout
+        android:id="@+id/etfFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/appTitle0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
     <TextView
         android:id="@+id/etfValue"
         android:layout_width="match_parent"
@@ -37,6 +55,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+        <TextView
+            android:id="@+id/etfPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:hint=""
+            android:textSize="18sp"
+            android:padding="12dp"
+            />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/zabaFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/etfFrame"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
     <!-- ZABA value -->
     <TextView
         android:id="@+id/zabaValue"
@@ -47,24 +83,50 @@
         android:textColor="#000"
         android:background="#FFF3E0"
         android:padding="12dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintTop_toBottomOf="@id/etfValue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/cryptoValue"
+        android:id="@+id/zabaPercentage"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:hint=""
+        android:textSize="18sp"
+        android:padding="12dp"
+        />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/cryptoFrame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Crypto total: --"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:background="#F3E5F5"
-        android:padding="12dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintTop_toBottomOf="@id/zabaValue"
+        app:layout_constraintTop_toBottomOf="@+id/zabaFrame"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:id="@+id/cryptoValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crypto total: --"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:background="#F3E5F5"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/zabaFrame"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/cryptoPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:hint=""
+            android:textSize="18sp"
+            android:padding="12dp"
+        />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/portfolioValue"
@@ -75,7 +137,7 @@
         android:textColor="#000"
         android:background="#E0FAE2"
         android:padding="12dp"
-        app:layout_constraintTop_toBottomOf="@id/cryptoValue"
+        app:layout_constraintTop_toBottomOf="@id/cryptoFrame"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -100,13 +162,27 @@
         android:id="@+id/appTitle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:text="Positions"
         android:textColor="#333"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/fetchButton"
+        android:layout_marginLeft="30dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fetchButton" />
+
+    <TextView
+        android:id="@+id/appTitle3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invested"
+        android:textColor="#333"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:gravity="end"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/fetchButton"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- VWCE value -->
@@ -135,7 +211,17 @@
             android:ems="6"
             android:hint="0.00"
             android:inputType="numberDecimal"
-            android:layout_marginStart="75dp"
+            android:layout_marginStart="95dp"
+            />
+        <EditText
+            android:id="@+id/vwceMoneyInvested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"
             />
     </FrameLayout>
 
@@ -164,9 +250,18 @@
             android:layout_height="wrap_content"
             android:ems="6"
             android:hint="0.00"
-            android:layout_marginStart="75dp"
+            android:layout_marginStart="95dp"
             android:inputType="numberDecimal"
              />
+        <EditText
+            android:id="@+id/fwraMoneyInvested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"/>
     </FrameLayout>
 
     <!-- ZABA amount -->
@@ -193,8 +288,17 @@
         android:layout_height="wrap_content"
         android:ems="6"
         android:hint="0.00"
-        android:layout_marginStart="75dp"
+        android:layout_marginStart="95dp"
         android:inputType="numberDecimal" />
+    <EditText
+        android:id="@+id/zabaMoneyInvested"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="6"
+        android:hint="0.00"
+        android:inputType="numberDecimal"
+        android:layout_marginEnd="10dp"
+        android:layout_gravity="end"/>
     </FrameLayout>
 
     <!-- Bitcoin value -->
@@ -222,9 +326,18 @@
             android:layout_height="wrap_content"
             android:ems="6"
             android:hint="0.00"
-            android:layout_marginStart="75dp"
+            android:layout_marginStart="95dp"
             android:inputType="numberDecimal"
             />
+        <EditText
+            android:id="@+id/bitcoinMoneyInvested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"/>
     </FrameLayout>
 
     <!-- Ethereum value -->
@@ -257,6 +370,15 @@
             android:layout_marginStart="95dp"
             android:inputType="numberDecimal"
             />
+        <EditText
+            android:id="@+id/etheriumMoneyInvested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end" />
     </FrameLayout>
 
     <Button
