@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 etfValue = price;
                 portfolioValue = portfolioValue.add(price);
                 etfProfit = price.subtract(Converters.fromString(String.valueOf(vwceMoneyInvested.getText())).add(Converters.fromString(String.valueOf(fwraMoneyInvested.getText()))));
-                etfView.setText("ETF total: " + price.toPlainString() + "€          (" + etfProfit + ")");
+                etfView.setText("ETF total: " + price.toPlainString() + "€   (" + etfProfit + ")");
                 updatePortfolioValue();
             }
 
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 zabaValue = price;
                 portfolioValue = portfolioValue.add(price);
                 zabaProfit = price.subtract(Converters.fromString(String.valueOf(zabaMoneyInvested.getText())));
-                zabaView.setText("ZABA total: " + price.toPlainString() + "€          (" + zabaProfit + ")");
+                zabaView.setText("ZABA total: " + price.toPlainString() + "€   (" + zabaProfit + ")");
                 updatePortfolioValue();
             }
 
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 cryptoValue = price;
                 portfolioValue = portfolioValue.add(price);
                 cryptoProfit = price.subtract(Converters.fromString(String.valueOf(bitcoinMoneyInvested.getText())).add(Converters.fromString(String.valueOf(etheriumMoneyInvested.getText()))));
-                cryptoView.setText("Crypto total: " + price.toPlainString() + "€          (" + cryptoProfit + ")");
+                cryptoView.setText("Crypto total: " + price.toPlainString() + "€   (" + cryptoProfit + ")");
                 updatePortfolioValue();
             }
 
