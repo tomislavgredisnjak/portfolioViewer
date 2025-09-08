@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private InvestmentDao investmentDao;
 
     private List<Investment> investments;
+
+    private BigDecimal etfProfit;
+    private BigDecimal zabaProfit;
+    private BigDecimal cryptoProfit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 // Update UI
                 etfValue = price;
                 portfolioValue = portfolioValue.add(price);
-                etfView.setText("ETF total: " + price.toPlainString());
+                etfProfit = price.subtract(Converters.fromString(String.valueOf(vwceMoneyInvested.getText())).add(Converters.fromString(String.valueOf(fwraMoneyInvested.getText()))));
+                etfView.setText("ETF total: " + price.toPlainString() + "€          (" + etfProfit + ")");
                 updatePortfolioValue();
             }
 
@@ -194,7 +199,8 @@ public class MainActivity extends AppCompatActivity {
                 // Update UI
                 zabaValue = price;
                 portfolioValue = portfolioValue.add(price);
-                zabaView.setText("ZABA total: " + price.toPlainString());
+                zabaProfit = price.subtract(Converters.fromString(String.valueOf(zabaMoneyInvested.getText())));
+                zabaView.setText("ZABA total: " + price.toPlainString() + "€          (" + zabaProfit + ")");
                 updatePortfolioValue();
             }
 
@@ -213,7 +219,8 @@ public class MainActivity extends AppCompatActivity {
                 // Update UI
                 cryptoValue = price;
                 portfolioValue = portfolioValue.add(price);
-                cryptoView.setText("Crypto total: " + price.toPlainString());
+                cryptoProfit = price.subtract(Converters.fromString(String.valueOf(bitcoinMoneyInvested.getText())).add(Converters.fromString(String.valueOf(etheriumMoneyInvested.getText()))));
+                cryptoView.setText("Crypto total: " + price.toPlainString() + "€          (" + cryptoProfit + ")");
                 updatePortfolioValue();
             }
 
@@ -277,7 +284,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePortfolioValue() {
-        portfolioView.setText("Portfolio value: " + portfolioValue.toPlainString());
+        if (etfProfit != null && zabaProfit != null && cryptoProfit != null)
+            portfolioView.setText("Portfolio value: " + portfolioValue.toPlainString() + "€     (" + etfProfit.add(zabaProfit).add(cryptoProfit) + ")");
+        else
+            portfolioView.setText("Portfolio value: " + portfolioValue.toPlainString() + "€");
         if (etfValue != null) {
             String etfPercentageValue = etfValue.divide(portfolioValue, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP).toString() + "%";
             etfPercentage.setText(etfPercentageValue);
