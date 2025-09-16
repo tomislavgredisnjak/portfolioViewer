@@ -31,12 +31,15 @@ public class DataFetcher {
 
     public void getEtf(BigDecimal vwceAmount, BigDecimal fwraAmount, Callback callback) {
         executor.execute(() -> {
+            if (vwceAmount == null || fwraAmount == null || vwceAmount.add(fwraAmount).compareTo(BigDecimal.ZERO) <= 0) {
+                handler.post(() -> callback.onError(new Exception("Invalid amount")));
+                return;
+            }
             BigDecimal finalPrice = BigDecimal.ZERO;
             String apiKey = "b7a5f1dd120a6e84b84687aed9339dd38e0f2ed2c9f1dd5d8f2d168c6eb88942";
 
             String urlFwra = "https://serpapi.com/search.json?engine=google_finance&q=FWRA&api_key=" + apiKey;
             String urlVwce = "https://serpapi.com/search.json?engine=google_finance&q=VWCE&api_key=" + apiKey;
-
             try {
                 // Fetch FWRA
                 String responseFwra = fetchUrl(urlFwra);
@@ -74,19 +77,21 @@ public class DataFetcher {
 
     public void getZaba(BigDecimal zabaAmount, Callback callback) {
         executor.execute(() -> {
+            if (zabaAmount == null || zabaAmount.compareTo(BigDecimal.ZERO) <= 0) {
+                handler.post(() -> callback.onError(new Exception("Invalid amount")));
+                return;
+            }
             String url = "https://zse.hr/hr/papir/310?isin=HRZABARA0009&range=2m";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
                     .build();
-
             try (Response response = client.newCall(request).execute()) {
                 if (response.isSuccessful() && response.body() != null) {
                     String json = response.body().string();
 
                     ObjectMapper objectMapper = new ObjectMapper();
                     JsonNode root = objectMapper.readTree(json);
-
                     JsonNode listedSecurities = root.path("ListedSecurities");
                     if (listedSecurities.isArray() && listedSecurities.size() > 0) {
                         BigDecimal result = new BigDecimal(listedSecurities.get(0).path("last_price").asText()).multiply(zabaAmount).setScale(2, RoundingMode.HALF_UP);
@@ -105,6 +110,11 @@ public class DataFetcher {
 
     public void getCrypto(BigDecimal btcAmount, BigDecimal ethAmount, Callback callback) {
         executor.execute(() -> {
+            if (btcAmount == null || ethAmount == null || btcAmount.add(ethAmount).compareTo(BigDecimal.ZERO) <= 0) {
+                handler.post(() -> callback.onError(new Exception("Invalid amount")));
+                return;
+            }
+
             BigDecimal finalPrice = BigDecimal.ZERO;
             String url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=eur";
 

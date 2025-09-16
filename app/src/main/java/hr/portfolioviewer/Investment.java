@@ -13,12 +13,15 @@ public class Investment {
     private InvestmentType type;
     private BigDecimal amount;
     private BigDecimal moneyInvested;
+    private BigDecimal moneyCollected;
 
-    public Investment(String name, InvestmentType type, BigDecimal amount, BigDecimal moneyInvested) {
+
+    public Investment(String name, InvestmentType type, BigDecimal amount, BigDecimal moneyInvested, BigDecimal moneyCollected) {
         this.name = name;
         this.type = type;
         this.amount = amount;
         this.moneyInvested = moneyInvested;
+        this.moneyCollected = moneyCollected;
     }
 
     public int getId() {
@@ -59,5 +62,11 @@ public class Investment {
 
     public void setMoneyInvested(BigDecimal moneyInvested) {
         this.moneyInvested = moneyInvested;
+    }
+    public BigDecimal getMoneyCollected() {
+        return moneyCollected;
+    }
+    public void setMoneyCollected(BigDecimal moneyCollected) {
+        this.moneyCollected = moneyCollected;
     }
 }
