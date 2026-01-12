@@ -4,5 +4,5 @@ public enum TransactionType {
     BUY,
     SELL,
     DIVIDEND,
-    SET
+    CHANGE
 }

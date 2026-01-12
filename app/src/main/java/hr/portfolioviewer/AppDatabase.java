@@ -10,7 +10,7 @@ import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Investment.class, Portfolio.class, Transactions.class}, version = 6)
+@Database(entities = {Investment.class, Portfolio.class, Transactions.class}, version = 7)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract InvestmentDao investmentDao();
@@ -54,7 +54,15 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             // Example: add a new column
-            database.execSQL("CREATE TABLE IF NOT EXISTS Transactions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, investment TEXT, transactionType TEXT, transactionTime INTEGER, amount TEXT, price TEXT)");
+            database.execSQL("CREATE TABLE IF NOT EXISTS Transactions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, investment TEXT, transactionType TEXT, transactionTime INTEGER, amount TEXT, price TEXT, price TEXT)");
+        }
+    };
+
+    static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Example: add a new column
+            database.execSQL("ALTER TABLE Transactions ADD COLUMN collected TEXT");
         }
     };
 
@@ -64,7 +72,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "PortfolioDb")
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                             .build();
                 }
             }

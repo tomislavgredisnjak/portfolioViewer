@@ -15,14 +15,15 @@ public class Transactions {
     private LocalDateTime transactionTime;
     private BigDecimal amount;
     private BigDecimal price;
+    private BigDecimal collected;
 
-
-    public Transactions(TransactionType transactionType, Investment investment, LocalDateTime transactionTime, BigDecimal amount, BigDecimal price) {
+    public Transactions(TransactionType transactionType, Investment investment, LocalDateTime transactionTime, BigDecimal amount, BigDecimal price, BigDecimal collected) {
         this.transactionType = transactionType;
         this.investment = investment;
         this.transactionTime = transactionTime;
         this.amount = amount;
         this.price = price;
+        this.collected = collected;
     }
 
     public int getId() {
@@ -67,5 +68,11 @@ public class Transactions {
     }
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+    public BigDecimal getCollected() {
+        return collected;
+    }
+    public void setCollected(BigDecimal collected) {
+        this.collected = collected;
     }
 }

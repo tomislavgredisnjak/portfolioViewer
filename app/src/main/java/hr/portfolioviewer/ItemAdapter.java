@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -41,15 +42,38 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        var item = items.get(position);
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.getDefault());
-        String formattedDate =
-                items.get(position)
-                        .getTransactionTime()
-                        .format(formatter);
-        TransactionType type = items.get(position).getTransactionType();
-        String text = type + " " + (type != TransactionType.DIVIDEND ? items.get(position).getAmount() + " " : "") + items.get(position).getInvestment().getName() + " for " + items.get(position).getPrice() + " at " + formattedDate;
-        holder.textView.setText(text);
+        String formattedDate = item.getTransactionTime().format(formatter);
+        TransactionType type = item.getTransactionType();
+        BigDecimal amount = item.getAmount();
+        BigDecimal price = item.getPrice();
+        BigDecimal collected = item.getCollected();
+        String signAmount = amount.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
+        String signPrice = price.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
+        String signCollected = collected.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
+        StringBuilder text = new StringBuilder();
+
+        text.append(type).append(" ");
+        if (type != TransactionType.DIVIDEND) {
+            if (type == TransactionType.CHANGE) {
+                text.append(signAmount);
+            }
+            text.append(amount).append(" ");
+        }
+        text.append(item.getInvestment().getName()).append(" for ");
+        if (type == TransactionType.CHANGE) {
+            text.append(signPrice);
+        }
+        text.append(price).append(" €");
+        if (type == TransactionType.CHANGE) {
+            text.append(" collected ")
+                    .append(signCollected)
+                    .append(collected);
+        }
+        text.append(" at ").append(formattedDate);
+        holder.textView.setText(text.toString());
     }
 
     @Override

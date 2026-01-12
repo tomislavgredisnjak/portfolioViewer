@@ -159,7 +159,7 @@ public class TransactionsFragment extends Fragment {
 
             // Insert transaction
             Transactions transaction = new Transactions(type, selectedInvestment,
-                    LocalDateTime.now(), amount, price);
+                    LocalDateTime.now(), amount, price, null);
             viewModel.insertTransactionWithInvestment(transaction);
 
             Toast.makeText(requireContext(), "Transaction added", Toast.LENGTH_SHORT).show();

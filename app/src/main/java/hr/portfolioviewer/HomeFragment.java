@@ -18,11 +18,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
@@ -85,6 +87,7 @@ public class HomeFragment extends Fragment {
     private AppDatabase db;
 
     private InvestmentDao investmentDao;
+    private TransactionViewModel viewModel;
     private PortfolioDao portfolioDao;
 
     private List<Investment> investments;
@@ -105,6 +108,7 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_activity, container, false);
         db = AppDatabase.getDatabase(requireContext());
+        viewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         executor.execute(new Runnable() {
@@ -343,65 +347,97 @@ public class HomeFragment extends Fragment {
     private void saveData() {
         for (Investment i : investments) {
             boolean changes = false;
+            BigDecimal amountChange = i.getAmount();
+            BigDecimal moneyInvestedChange = i.getMoneyInvested();
+            BigDecimal moneyCollectedChange = i.getMoneyCollected();
 
             if (i.getName().equals("VWCE") && (!i.getAmount().toString().contentEquals(vwceAmount.getText()) ||
                     (!i.getMoneyInvested().toString().contentEquals(vwceMoneyInvested.getText())) ||
                     (!i.getMoneyCollected().toString().contentEquals(vwceMoneyCollected.getText())))) {
                 i.setAmount(new BigDecimal(vwceAmount.getText().toString()));
                 vwceAmountValue = new BigDecimal(vwceAmount.getText().toString());
-                if(!vwceMoneyInvested.getText().toString().isEmpty())
+                amountChange = vwceAmountValue.subtract(amountChange);
+                if(!vwceMoneyInvested.getText().toString().isEmpty()) {
                     i.setMoneyInvested(new BigDecimal(vwceMoneyInvested.getText().toString()));
-                if(!vwceMoneyCollected.getText().toString().isEmpty())
+                    moneyInvestedChange = new BigDecimal(vwceMoneyInvested.getText().toString()).subtract(moneyInvestedChange);
+                }
+                if(!vwceMoneyCollected.getText().toString().isEmpty()) {
                     i.setMoneyCollected(new BigDecimal(vwceMoneyCollected.getText().toString()));
+                    moneyCollectedChange = new BigDecimal(vwceMoneyCollected.getText().toString()).subtract(moneyCollectedChange);
+                }
                 changes = true;
             } else if (i.getName().equals("FWRA") && (!i.getAmount().toString().contentEquals(fwraAmount.getText()) ||
                     (!i.getMoneyInvested().toString().contentEquals(fwraMoneyInvested.getText())) ||
                     (!i.getMoneyCollected().toString().contentEquals(fwraMoneyCollected.getText())))) {
                 i.setAmount(new BigDecimal(fwraAmount.getText().toString()));
                 fwraAmountValue = new BigDecimal(fwraAmount.getText().toString());
-                if(!fwraMoneyInvested.getText().toString().isEmpty())
+                amountChange = fwraAmountValue.subtract(amountChange);
+                if(!fwraMoneyInvested.getText().toString().isEmpty()) {
                     i.setMoneyInvested(new BigDecimal(fwraMoneyInvested.getText().toString()));
-                if(!fwraMoneyCollected.getText().toString().isEmpty())
+                    moneyInvestedChange = new BigDecimal(fwraMoneyInvested.getText().toString()).subtract(moneyInvestedChange);
+                }
+                if(!fwraMoneyCollected.getText().toString().isEmpty()) {
                     i.setMoneyCollected(new BigDecimal(fwraMoneyCollected.getText().toString()));
+                    moneyCollectedChange = new BigDecimal(fwraMoneyCollected.getText().toString()).subtract(moneyCollectedChange);
+                }
                 changes = true;
             } else if (i.getName().equals("ZABA") && (!i.getAmount().toString().contentEquals(zabaAmount.getText()) ||
                     (!i.getMoneyInvested().toString().contentEquals(zabaMoneyInvested.getText())) ||
                     (!i.getMoneyCollected().toString().contentEquals(zabaMoneyCollected.getText())))) {
                 i.setAmount(new BigDecimal(zabaAmount.getText().toString()));
                 zabaAmountValue = new BigDecimal(zabaAmount.getText().toString());
-                if(!zabaMoneyInvested.getText().toString().isEmpty())
+                amountChange = zabaAmountValue.subtract(amountChange);
+                if(!zabaMoneyInvested.getText().toString().isEmpty()) {
                     i.setMoneyInvested(new BigDecimal(zabaMoneyInvested.getText().toString()));
-                if(!zabaMoneyCollected.getText().toString().isEmpty())
+                    moneyInvestedChange = new BigDecimal(zabaMoneyInvested.getText().toString()).subtract(moneyInvestedChange);
+                }
+                if(!zabaMoneyCollected.getText().toString().isEmpty()) {
                     i.setMoneyCollected(new BigDecimal(zabaMoneyCollected.getText().toString()));
+                    moneyCollectedChange = new BigDecimal(zabaMoneyCollected.getText().toString()).subtract(moneyCollectedChange);
+                }
                 changes = true;
             } else if (i.getName().equals("Bitcoin") && (!i.getAmount().toString().contentEquals(bitcoinAmount.getText()) ||
                     (!i.getMoneyInvested().toString().contentEquals(bitcoinMoneyInvested.getText())) ||
                     (!i.getMoneyCollected().toString().contentEquals(bitcoinMoneyCollected.getText())))) {
                 i.setAmount(new BigDecimal(bitcoinAmount.getText().toString()));
                 bitcoinAmountValue = new BigDecimal(bitcoinAmount.getText().toString());
-                if(!bitcoinMoneyInvested.getText().toString().isEmpty())
+                amountChange = bitcoinAmountValue.subtract(amountChange);
+                if(!bitcoinMoneyInvested.getText().toString().isEmpty()) {
                     i.setMoneyInvested(new BigDecimal(bitcoinMoneyInvested.getText().toString()));
-                if(!bitcoinMoneyCollected.getText().toString().isEmpty())
+                    moneyInvestedChange = new BigDecimal(bitcoinMoneyInvested.getText().toString()).subtract(moneyInvestedChange);
+                }
+                if(!bitcoinMoneyCollected.getText().toString().isEmpty()) {
                     i.setMoneyCollected(new BigDecimal(bitcoinMoneyCollected.getText().toString()));
+                    moneyCollectedChange = new BigDecimal(bitcoinMoneyCollected.getText().toString()).subtract(moneyCollectedChange);
+                }
                 changes = true;
             } else if (i.getName().equals("Etherium") && (!i.getAmount().toString().contentEquals(etheriumAmount.getText()) ||
                     (!i.getMoneyInvested().toString().contentEquals(etheriumMoneyInvested.getText())) ||
                     (!i.getMoneyCollected().toString().contentEquals(etheriumMoneyCollected.getText())))) {
                 i.setAmount(new BigDecimal(etheriumAmount.getText().toString()));
                 etheriumAmountValue = new BigDecimal(etheriumAmount.getText().toString());
-                if(!etheriumMoneyInvested.getText().toString().isEmpty())
+                amountChange = etheriumAmountValue.subtract(amountChange);
+                if(!etheriumMoneyInvested.getText().toString().isEmpty()) {
                     i.setMoneyInvested(new BigDecimal(etheriumMoneyInvested.getText().toString()));
-                if(!etheriumMoneyCollected.getText().toString().isEmpty())
+                    moneyInvestedChange = new BigDecimal(etheriumMoneyInvested.getText().toString()).subtract(moneyInvestedChange);
+                }
+                if(!etheriumMoneyCollected.getText().toString().isEmpty()) {
                     i.setMoneyCollected(new BigDecimal(etheriumMoneyCollected.getText().toString()));
+                    moneyCollectedChange = new BigDecimal(etheriumMoneyCollected.getText().toString()).subtract(moneyCollectedChange);
+                }
                 changes = true;
             }
 
             if (changes) {
                 ExecutorService executor1 = Executors.newSingleThreadExecutor();
+                BigDecimal finalAmountChange = amountChange;
+                BigDecimal finalMoneyInvestedChange = moneyInvestedChange;
+                BigDecimal finalMoneyCollectedChange = moneyCollectedChange;
                 executor1.execute(new Runnable() {
                     @Override
                     public void run() {
-                        investmentDao.update(i);
+                        Transactions transaction = new Transactions(TransactionType.CHANGE, i, LocalDateTime.now(), finalAmountChange, finalMoneyInvestedChange, finalMoneyCollectedChange);
+                        viewModel.insertTransactionWithInvestment(transaction);
                     }
                 });
             }
