@@ -18,4 +18,7 @@ public interface InvestmentDao {
 
     @Query("SELECT * FROM Investment")
     List<Investment> getAllInvestments();
+
+    @Query("SELECT * FROM Investment WHERE id = :id LIMIT 1")
+    Investment getInvestmentById(int id);
 }

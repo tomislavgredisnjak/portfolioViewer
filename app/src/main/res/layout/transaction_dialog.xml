@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Investment Spinner -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Investment"
+            android:textStyle="bold"/>
+        <Spinner
+            android:id="@+id/investmentSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"/>
+
+        <!-- Transaction Type RadioGroup -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transaction Type"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+        <RadioGroup
+            android:id="@+id/transactionTypeGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rbBuy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BUY"/>
+            <RadioButton
+                android:id="@+id/rbSell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SELL"/>
+            <RadioButton
+                android:id="@+id/rbDividend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DIVIDEND"/>
+        </RadioGroup>
+
+        <!-- Amount input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+        <EditText
+            android:id="@+id/etAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Enter amount"/>
+
+        <!-- Price input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+        <EditText
+            android:id="@+id/etPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Enter price"/>
+
+    </LinearLayout>
+</ScrollView>

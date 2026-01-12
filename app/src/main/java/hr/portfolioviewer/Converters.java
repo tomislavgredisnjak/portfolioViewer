@@ -4,6 +4,9 @@ import androidx.room.TypeConverter;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -43,5 +46,34 @@ public class Converters {
     public static List<Investment> toInvestmentList(String value) {
         Type listType = new TypeToken<List<Investment>>() {}.getType();
         return gson.fromJson(value, listType);
+    }
+
+    @TypeConverter
+    public static String fromInvestment(Investment investment) {
+        return gson.toJson(investment);
+    }
+
+    @TypeConverter
+    public static Investment toInvestment(String json) {
+        return new Gson().fromJson(json, Investment.class);
+    }
+
+    @TypeConverter
+    public static Long fromLocalDateTime(LocalDateTime dateTime) {
+        if (dateTime == null) return null;
+
+        return dateTime
+                .atZone(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+    }
+
+    @TypeConverter
+    public static LocalDateTime toLocalDateTime(Long millis) {
+        if (millis == null) return null;
+
+        return Instant.ofEpochMilli(millis)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }

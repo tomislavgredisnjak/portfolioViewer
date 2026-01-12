@@ -40,11 +40,14 @@ public class DataFetcher {
 
             String urlFwra = "https://serpapi.com/search.json?engine=google_finance&q=FWRA&api_key=" + apiKey;
             String urlVwce = "https://serpapi.com/search.json?engine=google_finance&q=VWCE&api_key=" + apiKey;
+
+            String urlFwra1 = "https://query1.finance.yahoo.com/v8/finance/chart/FWRA.MI?interval=1d";
+            String urlVwce1 = "https://query1.finance.yahoo.com/v8/finance/chart/VWCE.MI?interval=1d";
             try {
                 // Fetch FWRA
                 String responseFwra = fetchUrl(urlFwra);
                 JsonNode root = objectMapper.readTree(responseFwra);
-                JsonNode futuresChain = root.path("futures_chain");
+                JsonNode futuresChain = root.path("suggestions");
 
                 for (JsonNode stock : futuresChain) {
                     if ("FWRA:BIT".equals(stock.get("stock").asText())) {
@@ -54,16 +57,54 @@ public class DataFetcher {
                     }
                 }
 
+                if(finalPrice.compareTo(BigDecimal.ZERO) == 0 && fwraAmount.compareTo(BigDecimal.ZERO) > 0) {
+                    responseFwra = fetchUrl(urlFwra1); // your JSON string from the API
+                    ObjectMapper objectMapper = new ObjectMapper();
+
+                    root = objectMapper.readTree(responseFwra);
+
+                    JsonNode regularMarketPriceNode = root.path("chart")
+                            .path("result")
+                            .get(0)
+                            .path("meta")
+                            .path("regularMarketPrice");
+
+                    if (!regularMarketPriceNode.isMissingNode()) {
+                        BigDecimal price = new BigDecimal(regularMarketPriceNode.asText());
+                        finalPrice = price.multiply(fwraAmount);
+                    }
+                }
+
                 // Fetch VWCE
                 String responseVwce = fetchUrl(urlVwce);
                 root = objectMapper.readTree(responseVwce);
-                futuresChain = root.path("futures_chain");
+                futuresChain = root.path("suggestions");
+                boolean vwceFound = false;
 
                 for (JsonNode stock : futuresChain) {
                     if ("VWCE:BIT".equals(stock.get("stock").asText())) {
                         BigDecimal price = new BigDecimal(stock.get("extracted_price").asText());
                         finalPrice = finalPrice.add(price.multiply(vwceAmount));
+                        vwceFound = true;
                         break;
+                    }
+                }
+
+                if(!vwceFound && vwceAmount.compareTo(BigDecimal.ZERO) > 0) {
+                    responseVwce = fetchUrl(urlVwce1); // your JSON string from the API
+                    ObjectMapper objectMapper = new ObjectMapper();
+
+                    root = objectMapper.readTree(responseVwce);
+
+                    JsonNode regularMarketPriceNode = root.path("chart")
+                            .path("result")
+                            .get(0)
+                            .path("meta")
+                            .path("regularMarketPrice");
+
+                    if (!regularMarketPriceNode.isMissingNode()) {
+                        BigDecimal price = new BigDecimal(regularMarketPriceNode.asText());
+                        finalPrice = finalPrice.add(price.multiply(vwceAmount));
                     }
                 }
 
