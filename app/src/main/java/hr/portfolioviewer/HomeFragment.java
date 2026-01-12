@@ -3,6 +3,7 @@ package hr.portfolioviewer;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -106,11 +103,11 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.home_activity, container, false);
         db = AppDatabase.getDatabase(requireContext());
         viewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         ExecutorService executor = Executors.newSingleThreadExecutor();
-
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -181,7 +178,7 @@ public class HomeFragment extends Fragment {
                 });
             }
         });
-        
+
         this.etfView = view.findViewById(R.id.etfValue);
         this.zabaView = view.findViewById(R.id.zabaValue);
         this.cryptoView = view.findViewById(R.id.cryptoValue);
@@ -258,6 +255,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void fetchData() {
+
         portfolioValue = BigDecimal.ZERO;
         fetcher.getEtf(vwceAmountValue, fwraAmountValue, new DataFetcher.Callback() {
             @Override

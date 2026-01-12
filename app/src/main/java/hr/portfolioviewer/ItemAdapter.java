@@ -52,7 +52,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         BigDecimal collected = item.getCollected();
         String signAmount = amount.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
         String signPrice = price.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
-        String signCollected = collected.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
+        String signCollected = collected != null && collected.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
         StringBuilder text = new StringBuilder();
 
         text.append(type).append(" ");
