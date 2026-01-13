@@ -69,7 +69,6 @@ public class Investment {
     public void setMoneyCollected(BigDecimal moneyCollected) {
         this.moneyCollected = moneyCollected;
     }
-
     @Override
     public String toString() {
         return name;

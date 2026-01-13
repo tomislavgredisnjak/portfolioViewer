@@ -148,7 +148,7 @@ public class TransactionsFragment extends Fragment {
                 // Only parse amount if relevant
                 try {
                     amount = new BigDecimal(etAmount.getText().toString());
-                    if(amount == null || amount.compareTo(BigDecimal.ZERO) <= 0 || amount.compareTo(selectedInvestment.getAmount()) > 0)
+                    if(amount == null || amount.compareTo(BigDecimal.ZERO) <= 0 || (amount.compareTo(selectedInvestment.getAmount()) > 0 && type == TransactionType.SELL))
                         throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     Toast.makeText(requireContext(), "Invalid amount", Toast.LENGTH_SHORT).show();

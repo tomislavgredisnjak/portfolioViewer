@@ -33,6 +33,11 @@ public class TransactionRepository {
                     case DIVIDEND:
                         investment.setMoneyCollected(investment.getMoneyCollected().add(transactions.getPrice()));
                         break;
+                    case CHANGE:
+                        investment.setAmount(investment.getAmount().add(transactions.getAmount()));
+                        investment.setMoneyInvested(investment.getMoneyInvested().add(transactions.getPrice()));
+                        investment.setMoneyCollected(investment.getMoneyCollected().add(transactions.getCollected()));
+                        break;
                 }
 
                 investmentDao.update(investment);

@@ -3,10 +3,12 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/home"
+        android:color="#6A1B9A" android:state_checked="true"
         android:title="Home"/>
 
     <item
         android:id="@+id/nav_transactions"
+        android:color="#888888"
         android:icon="@drawable/transactions"
         android:title="Transactions"/>
 
