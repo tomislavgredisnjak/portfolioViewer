@@ -1,0 +1,19 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="Settings">
+
+        <EditTextPreference
+            app:key="apiKey"
+            app:title="SerpApi API key"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="goal"
+            app:title="Goal"
+            android:inputType="number"
+            android:defaultValue="0"
+            app:useSimpleSummaryProvider="true"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

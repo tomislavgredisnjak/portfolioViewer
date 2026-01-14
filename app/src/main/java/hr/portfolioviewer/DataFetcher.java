@@ -1,7 +1,14 @@
 package hr.portfolioviewer;
 
+import static java.security.AccessController.getContext;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
+
+import androidx.preference.PreferenceManager;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +25,12 @@ import okhttp3.Response;
 
 public class DataFetcher {
 
+    private final Context context;
+
+    public DataFetcher(Context context) {
+        this.context = context.getApplicationContext();
+    }
+
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -30,13 +43,19 @@ public class DataFetcher {
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     public void getEtf(BigDecimal vwceAmount, BigDecimal fwraAmount, Callback callback) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String apiKey = prefs.getString("apiKey", "0");
+        if(apiKey == null || apiKey.isEmpty()) {
+            handler.post(() -> callback.onError(new Exception("Set up SerpApi API key in profile settings!")));
+            return;
+        }
+
         executor.execute(() -> {
             if (vwceAmount == null || fwraAmount == null || vwceAmount.add(fwraAmount).compareTo(BigDecimal.ZERO) <= 0) {
                 handler.post(() -> callback.onError(new Exception("Invalid amount")));
                 return;
             }
             BigDecimal finalPrice = BigDecimal.ZERO;
-            String apiKey = "b7a5f1dd120a6e84b84687aed9339dd38e0f2ed2c9f1dd5d8f2d168c6eb88942";
 
             String urlFwra = "https://serpapi.com/search.json?engine=google_finance&q=FWRA&api_key=" + apiKey;
             String urlVwce = "https://serpapi.com/search.json?engine=google_finance&q=VWCE&api_key=" + apiKey;

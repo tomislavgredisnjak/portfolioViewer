@@ -12,4 +12,10 @@
         android:icon="@drawable/transactions"
         android:title="Transactions"/>
 
+    <item
+        android:id="@+id/nav_profile"
+        android:color="#888888"
+        android:icon="@drawable/profile"
+        android:title="Profile"/>
+
 </menu>

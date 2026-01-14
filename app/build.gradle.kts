@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.jackson.databind)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.preference)
     testImplementation(libs.junit)
     implementation(libs.gson)
     androidTestImplementation(libs.ext.junit)

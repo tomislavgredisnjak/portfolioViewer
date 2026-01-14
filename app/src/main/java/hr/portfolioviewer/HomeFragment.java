@@ -1,6 +1,7 @@
 package hr.portfolioviewer;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -45,6 +48,8 @@ public class HomeFragment extends Fragment {
     private TextView etfPercentage;
     private TextView zabaPercentage;
     private TextView cryptoPercentage;
+    private TextView progressText;
+
     private Button fetchButton;
 
     private EditText vwceAmount;
@@ -71,6 +76,7 @@ public class HomeFragment extends Fragment {
     private EditText zabaMoneyCollected;
     private EditText bitcoinMoneyCollected;
     private EditText etheriumMoneyCollected;
+    private ProgressBar loadingBar;
 
     private BigDecimal etfValue;
     private BigDecimal zabaValue;
@@ -96,6 +102,9 @@ public class HomeFragment extends Fragment {
     private BigDecimal cryptoProfit;
     private Date startOfInvestingDateValue;
     private BigDecimal profit;
+    private BigDecimal goal;
+    private BigDecimal scale = BigDecimal.valueOf(100);
+
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
     @Nullable
@@ -191,6 +200,7 @@ public class HomeFragment extends Fragment {
         this.zabaPercentage = view.findViewById(R.id.zabaPercentage);
         this.cryptoPercentage = view.findViewById(R.id.cryptoPercentage);
         this.portfolioView = view.findViewById(R.id.portfolioValue);
+        this.progressText = view.findViewById(R.id.progressText);
         this.fetchButton = view.findViewById(R.id.fetchButton);
         this.vwceAmount = view.findViewById(R.id.vwceInput);
         this.fwraAmount = view.findViewById(R.id.fwraInput);
@@ -209,8 +219,17 @@ public class HomeFragment extends Fragment {
         this.etheriumMoneyCollected = view.findViewById(R.id.etheriumMoneyCollected);
         this.saveButton = view.findViewById(R.id.saveButton);
         this.startOfInvestingDate = view.findViewById(R.id.startOfInvestingDate);
+        this.loadingBar = view.findViewById(R.id.loadingBar);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        this.goal = BigDecimal.ZERO;
+        try {
+            goal = BigDecimal.valueOf(Long.parseLong(prefs.getString("goal", "0")));
+        } catch (NumberFormatException e) {
+            goal = BigDecimal.ZERO;
+        }
+        loadingBar.setMax(goal.multiply(scale).intValueExact());
 
-        fetcher = new DataFetcher();
+        fetcher = new DataFetcher(getContext());
         fetchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,7 +300,7 @@ public class HomeFragment extends Fragment {
                 etfView.setText("??");
                 etfProfitView.setText("??");
                 etfProfitView.setTextColor(Color.RED);
-                Toast.makeText(getContext(), "Error fetching ETF", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error fetching ETF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -470,6 +489,14 @@ public class HomeFragment extends Fragment {
             String cryptoPercentageValue = cryptoValue.divide(portfolioValue, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP).toString() + "%";
             cryptoPercentage.setText(cryptoPercentageValue);
         }
+
+        int progress = portfolioValue.multiply(scale).intValueExact();
+        BigDecimal percent = portfolioValue
+                .divide(goal, 4, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal("100"));
+        progressText.setText("Goal reached: " + percent.setScale(2, RoundingMode.HALF_UP) + "%");
+
+        loadingBar.setProgress(progress);
         calculateMonthlyProfit();
     }
 
@@ -490,5 +517,4 @@ public class HomeFragment extends Fragment {
             profitPerMonthView.setTextColor(Color.BLACK);
         }
     }
-
 }

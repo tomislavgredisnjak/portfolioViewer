@@ -291,6 +291,28 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
+        android:id="@+id/progressText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fetchButton"
+        android:paddingTop="10dp"
+        android:text="Goal reached: 0%" />
+
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="0"
+        app:layout_constraintTop_toBottomOf="@id/progressText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="10dp"
+        />
+
+    <TextView
         android:id="@+id/positionsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -301,7 +323,7 @@
         android:textStyle="bold"
         android:layout_marginStart="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fetchButton" />
+        app:layout_constraintTop_toBottomOf="@+id/loadingBar" />
 
     <TextView
         android:id="@+id/investedText"
@@ -313,7 +335,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/positionsText"
-        app:layout_constraintTop_toBottomOf="@+id/fetchButton"
+        app:layout_constraintTop_toBottomOf="@+id/loadingBar"
         android:layout_marginLeft="55dp" />
 
     <TextView
@@ -329,7 +351,7 @@
         android:gravity="end"
         android:layout_marginRight="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fetchButton" />
+        app:layout_constraintTop_toBottomOf="@+id/loadingBar" />
 
     <FrameLayout
         android:id="@+id/vwceAmount"
