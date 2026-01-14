@@ -490,13 +490,15 @@ public class HomeFragment extends Fragment {
             cryptoPercentage.setText(cryptoPercentageValue);
         }
 
-        int progress = portfolioValue.multiply(scale).intValueExact();
-        BigDecimal percent = portfolioValue
-                .divide(goal, 4, RoundingMode.HALF_UP)
-                .multiply(new BigDecimal("100"));
-        progressText.setText("Goal reached: " + percent.setScale(2, RoundingMode.HALF_UP) + "%");
+        if(goal.compareTo(BigDecimal.ZERO) != 0) {
+            int progress = portfolioValue.multiply(scale).intValueExact();
+            BigDecimal percent = portfolioValue
+                    .divide(goal, 4, RoundingMode.HALF_UP)
+                    .multiply(new BigDecimal("100"));
+            progressText.setText("Goal reached: " + percent.setScale(2, RoundingMode.HALF_UP) + "%");
 
-        loadingBar.setProgress(progress);
+            loadingBar.setProgress(progress);
+        }
         calculateMonthlyProfit();
     }
 
